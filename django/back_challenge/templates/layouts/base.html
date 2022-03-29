@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% comment %} Tailwind {% endcomment %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% comment %} AlpineJs {% endcomment %}
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <title>{% block title %}{% endblock title %}Back Challenge</title>
+
+    <style type="text/tailwindcss">
+      @layer base {
+        input {
+          @apply p-2 border-2 rounded-lg;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans antialiased flex flex-col min-h-screen bg-waiting-room"
+  >
+    <header>Header</header>
+
+    <main class="flex-grow">
+      <div class="container px-2 py-4">
+        {% block content %}{% endblock content %}
+      </div>
+    </main>
+
+    <footer>Footer</footer>
+
+    {% block script %}{% endblock script %}
+  </body>
+</html>

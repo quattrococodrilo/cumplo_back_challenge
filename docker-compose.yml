@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+  web:
+    build:
+      context: ./django/compose
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./django/back_challenge:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+volumes:
+  mysql:
+    driver: local
