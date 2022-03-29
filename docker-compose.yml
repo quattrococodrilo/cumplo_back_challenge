@@ -15,7 +15,6 @@ services:
   web:
     build:
       context: ./django/compose
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./django/back_challenge:/code
     ports:
@@ -24,6 +23,7 @@ services:
       - DB_DATABASE=${DB_DATABASE}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+    command: "/entry_point.sh"
     depends_on:
       - db
 volumes:
