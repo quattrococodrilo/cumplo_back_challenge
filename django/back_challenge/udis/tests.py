@@ -34,7 +34,7 @@ class UdisTest(TestCase):
         response = client.get(
             reverse('udis:index'),
             {
-                'start_date': '',
+                'start_date': '2020-02-20',
                 'end_date': '',
             }
         )
@@ -58,7 +58,7 @@ class UdisTest(TestCase):
 
         self.assertEqual(len(data), 20)
 
-    def test_get_udis_wrong_date(self):
+    def test_get_udis_wrong_data_range(self):
         client = Client()
 
         response = client.get(
@@ -72,3 +72,26 @@ class UdisTest(TestCase):
         self.assertEqual(200, response.status_code)
 
         form = response.context.get('form')
+
+        self.assertTrue(
+            'La fecha inicial debe ser menor a la fecha final.' in form.non_field_errors()
+        )
+
+    def test_get_udis_1995_5_fail(self):
+        client = Client()
+
+        response = client.get(
+            reverse('udis:index'),
+            {
+                'start_date': '1995-04-02',
+                'end_date': '1995-04-20',
+            }
+        )
+
+        self.assertEqual(200, response.status_code)
+
+        form = response.context.get('form')
+
+        self.assertTrue(
+            'La fecha inicial no debe ser menor al mes de mayo de 1995' in form.non_field_errors()
+        )

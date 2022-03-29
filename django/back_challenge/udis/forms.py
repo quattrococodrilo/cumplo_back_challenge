@@ -36,10 +36,10 @@ class UdisForm(forms.Form):
                 'La fecha final no puede ser menor a 1995.'
             )
 
-        if start_date.month < 5 and start_date.year < 1995:
+        if start_date.month < 5 and start_date.year <= 1995:
             raise ValidationError(
                 'La fecha inicial no debe ser menor al mes de mayo de 1995')
 
-        if end_date and end_date.month < 5 and end_date.year < 1995:
+        if end_date and end_date.month < 5 and end_date.year <= 1995:
             raise ValidationError(
                 'La fecha final no debe ser menor al mes de mayo de 1995')

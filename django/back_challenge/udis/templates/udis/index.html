@@ -21,6 +21,10 @@
 
     </div>
     <div>
+        <p>Promedio: {{ average }}</p>
+        <p>Máximo: {{ max }}</p>
+        <p>Mínimo: {{ min }}</p>
+
         {% for item in udis %}
         <p>{{ item.fecha }} - {{ item.dato }}</p>
         {% empty %}
