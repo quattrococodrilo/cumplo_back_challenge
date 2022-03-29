@@ -140,3 +140,13 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# BANXICO
+
+BANXICO_API = 'https://www.banxico.org.mx/SieAPIRest/service/v1/series/'
+
+BANXICO_TOKEN = '326fafac9dc7facc7048216652fcc83200ed186275f65eabf37c970da5855d38'
+
+BANXICO_UDIS_SERIES = 'SP68257'
+
+BANXICO_ENDPOINT = 'datos'

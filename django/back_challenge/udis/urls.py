@@ -4,5 +4,5 @@ from udis import views
 app_name = 'udis'
 
 urlpatterns = [
-    path('', views.UdisFormView.as_view(), name='index'),
+    path('', views.UdisIndexView.as_view(), name='index'),
 ]

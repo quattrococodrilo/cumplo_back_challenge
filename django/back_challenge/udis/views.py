@@ -1,19 +1,36 @@
-from re import template
+from datetime import datetime
 
-from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import TemplateView
 
-from udis.forms import UdisForm
+from .forms import UdisForm
+from .helpers import get_banxico_data
 
 
-class UdisFormView(FormView):
+class UdisIndexView(TemplateView):
 
     template_name = 'udis/index.html'
-    form_class = UdisForm
-    success = reverse_lazy('udis:index')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["udis"] = []
+
+        today = datetime.today().strftime('%Y-%m-%d')
+
+        udis_today = get_banxico_data(today)
+
+        context['udis_today'] = udis_today[0]['dato']
+
+        params = self.request.GET.dict()
+
+        if 'start_date' in params or 'end_date' in params:
+            form = UdisForm(params)
+            context['form'] = form
+            if form.is_valid():
+                dataCleaned = list(form.cleaned_data.values())
+                context['udis'] = get_banxico_data(
+                    start_date=dataCleaned[0].strftime('%Y-%m-%d'),
+                    end_date=(dataCleaned[1].strftime('%Y-%m-%d')
+                              if dataCleaned[1] else ''),
+                )
+        else:
+            context['form'] = UdisForm()
         return context

@@ -5,6 +5,12 @@ import requests
 
 
 class BanxicoApi:
+    """ 
+    Consulta la API de BANXICO.
+
+    @method create: devuelve una instanta de BanxicoApi. Requiere
+        los parametros api_url, token y entry_point
+    """
 
     _base_url: str = ''
     _serie: str = ''
@@ -12,7 +18,7 @@ class BanxicoApi:
     _token: str = ''
     _entry_point = ''
 
-    def __init__(self, api_url: str, token: str, entry_point: str) -> None:
+    def __init__(self, api_url: str, token: str) -> None:
 
         if not api_url:
             raise Exception('api_url is required.')
@@ -20,45 +26,77 @@ class BanxicoApi:
         if not token:
             raise Exception('token is required.')
 
-        if not token:
-            raise Exception('entry_point is required.')
-
         self._base_url = api_url if api_url[-1] != '/' else api_url[0:-1]
 
         self._token = token
-
-        self._entry_point = entry_point
 
         if not api_url:
             raise Exception('API URL is required.')
 
     @staticmethod
-    def create(api_url: str, token: str, entry_point: str) -> object:
-        return BanxicoApi(api_url, token, entry_point)
+    def create(api_url: str, token: str):
+        """Devuelve una instancia de BanxicoApi
+
+        Args:
+            api_url (str): URL de la API.
+            token (str): Token de autorización.
+
+        Returns:
+            object: BanxicoApi
+        """
+        return BanxicoApi(api_url, token)
 
     def _date_validator(self, date: str) -> bool:
+        """Valida que las fechas recibidas sean correctas.
+
+        Args:
+            date (str): Fecha en string, debe estar en el formato: YYYY-mm-dd
+
+        Raises:
+            Exception: Date format incorrect.
+            Exception: The year must be greater than or equal to 1995.
+            Exception: The month must be between 1 an 12.
+            Exception: The day must be in the range of days of the month.
+
+        Returns:
+            bool: True si la fecha es correcta.
+        """
 
         if not bool(re.search(r"^\d{4}-\d{1,2}-\d{1,2}$", date)):
-            raise Exception('El formato de la fecha no coincide.')
+            raise Exception('Date format incorrect, it must be YYYY-mm-dd.')
 
         [year, month, day] = [int(i) for i in date.split('-')]
 
         if year < 1995:
-            raise Exception('El año debe ser mayor o igual a 1995.')
+            raise Exception('The year must be greater than or equal to 1995.')
 
         if month > 13 or month < 1:
-            raise Exception('El año no puede ser mayor a 13 o menor de 1')
+            raise Exception('The month must be between 1 an 12.')
 
         number_of_days_in_month: int = monthrange(year, month)[1]
 
         if day > number_of_days_in_month or day < 1:
             raise Exception(
-                f'El día no puede ser mayor a {number_of_days_in_month} o menor de 1'
+                f'The day must be in the range of days of the month.'
             )
 
         return True
 
     def _url_builder(self, serie: str, start_date: str, end_date: str = '') -> str:
+        """ Construye la URL para la consulta.
+
+        Args:
+            serie (str): Serie de tópico a consultar.
+            start_date (str): Fecha inicial (YYYY-mm-dd)
+            end_date (str, optional): Fecha final (YYYY-mm-dd). Default ''.
+
+        Raises:
+            Exception: serie parametter is required.
+            Exception: start_date parametter is required.
+
+        Returns:
+            str: URL para la consulta.
+        """
 
         if not serie:
             raise Exception('serie parametter is required.')
@@ -79,7 +117,17 @@ class BanxicoApi:
 
         return url
 
-    def get(self, serie: str, start_date: str, end_date: str = ''):
+    def get(self, serie: str, start_date: str, end_date: str = '') -> list:
+        """Realiza la petición a BANXICO.
+
+        Args:
+            serie (str): Serie de tópico a consultar.
+            start_date (str): Fecha inicial (YYYY-mm-dd)
+            end_date (str, optional): Fecha final (YYYY-mm-dd). Default ''.
+
+        Returns:
+            list: lista de datos [{fecha: str, dato: float}]
+        """
         url = self._url_builder(serie, start_date, end_date)
 
         respose = requests.get(
@@ -91,6 +139,9 @@ class BanxicoApi:
         data = respose.json()
 
         if 'bmx' in data:
-            return data['bmx']['series'][0]['datos']
+            return [
+                {'fecha': i['fecha'], 'dato':float(i['dato'])}
+                for i in data['bmx']['series'][0]['datos']
+            ]
 
         return []
