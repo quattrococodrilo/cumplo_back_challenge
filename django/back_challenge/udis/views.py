@@ -29,19 +29,19 @@ class UdisIndexView(TemplateView):
             if form.is_valid():
                 dataCleaned = list(form.cleaned_data.values())
 
-                context['udis'] = get_banxico_data(
+                udis = get_banxico_data(
                     start_date=dataCleaned[0].strftime('%Y-%m-%d'),
                     end_date=(dataCleaned[1].strftime('%Y-%m-%d')
                               if dataCleaned[1] else ''),
                 )
 
-                udis_values = [i['dato'] for i in context['udis']]
+                context['udis'] = udis
 
-                context['average'] = sum(udis_values) / len(udis_values)
+                context['average'] = sum([i['dato'] for i in udis]) / len(udis)
 
-                context['max'] = max(udis_values)
+                context['max'] = max(udis, key=lambda i: i['dato'])
 
-                context['min'] = min(udis_values)
+                context['min'] = min(udis, key=lambda i: i['dato'])
 
         else:
             context['form'] = UdisForm()
