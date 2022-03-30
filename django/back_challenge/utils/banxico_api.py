@@ -10,7 +10,7 @@ class BanxicoApi:
     Consulta la API de BANXICO.
 
     @method create: devuelve una instanta de BanxicoApi. Requiere
-        los parametros api_url, token y entry_point
+        los parametros api_url y token
     """
 
     _base_url: str = ''

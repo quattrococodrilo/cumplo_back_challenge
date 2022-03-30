@@ -35,15 +35,37 @@
   <body
     class="font-sans antialiased flex flex-col min-h-screen bg-waiting-room"
   >
-    <header>Header</header>
+    <header>
+      <nav class="w-full bg-sky-500 flex justify-between p-4 shadow-xl gap-5">
+        <div class="w-2/12 flex items-center gap-2">
+          <a href="{% url 'core:home' %}">
+            {% include 'includes/icons/money.html' with width=100 %}
+          </a>
+          <div class="text-2xl font-bold text-blue-900 uppercase">
+            Banco
+          </div>
+        </div>
+        <div class="flex flex-row md:justify-start justify-end items-center gap-4 text-cyan-900 text-xl md:w-11/12">
+          <a href="{% url 'udis:index' %}" class="{% if 'udis' in request.path %}underline font-bold{% endif %}">
+              UDIS
+          </a>
+          
+          <a href="{% url 'dollar:index' %}" class="{% if 'dollar' in request.path %}underline font-bold{% endif %}">
+            Dolares
+          </a>           
+        </div>
+      </nav>
+    </header>
 
     <main class="flex-grow">
-      <div class="container px-10 py-10">
         {% block content %}{% endblock content %}
-      </div>
     </main>
 
-    <footer>Footer</footer>
+    <footer>
+      <div class="flex flex-col justify-center items-center bg-cyan-500 p-4">
+        Redes sociales
+      </div>
+    </footer>
 
     {% block scripts %}{% endblock scripts %}
   </body>
