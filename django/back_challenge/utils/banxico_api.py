@@ -134,7 +134,7 @@ class BanxicoApi:
 
         data = respose.json()
 
-        if 'bmx' in data:
+        if 'bmx' in data and 'datos' in data['bmx']['series'][0]:
             return [
                 {'fecha': i['fecha'], 'dato':float(i['dato'])}
                 for i in data['bmx']['series'][0]['datos']

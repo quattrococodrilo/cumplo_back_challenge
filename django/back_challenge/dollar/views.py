@@ -21,7 +21,7 @@ class DollarIndexView(TemplateView):
             start_date=today
         )
 
-        context['dollar_today'] = dollar_today[0]['dato']
+        context['dollar_today'] = dollar_today[0]['dato'] if len(dollar_today) > 0 else 0
 
         params = self.request.GET.dict()
 
