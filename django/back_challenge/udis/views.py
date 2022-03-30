@@ -1,9 +1,10 @@
 from datetime import datetime
 
+from back_chanllenge.settings import BANXICO_UDIS_SERIES
 from django.views.generic import TemplateView
+from utils.helpers import get_banxico_data
 
 from .forms import UdisForm
-from .helpers import get_banxico_data
 
 
 class UdisIndexView(TemplateView):
@@ -15,7 +16,10 @@ class UdisIndexView(TemplateView):
 
         today = datetime.today().strftime('%Y-%m-%d')
 
-        udis_today = get_banxico_data(today)
+        udis_today = get_banxico_data(
+            serie=BANXICO_UDIS_SERIES,
+            start_date=today
+        )
 
         context['udis_today'] = udis_today[0]['dato']
 
@@ -30,6 +34,7 @@ class UdisIndexView(TemplateView):
                 dataCleaned = list(form.cleaned_data.values())
 
                 udis = get_banxico_data(
+                    serie=BANXICO_UDIS_SERIES,
                     start_date=dataCleaned[0].strftime('%Y-%m-%d'),
                     end_date=(dataCleaned[1].strftime('%Y-%m-%d')
                               if dataCleaned[1] else ''),

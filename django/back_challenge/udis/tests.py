@@ -1,21 +1,8 @@
-from datetime import datetime, timedelta
-
 from django.shortcuts import reverse
 from django.test import Client, TestCase
-from .helpers import get_banxico_data
 
 
 class UdisTest(TestCase):
-
-    def test_banxico_api_helper_one_data(self):
-        data = get_banxico_data(start_date='2022-3-28')
-
-        self.assertEqual(data[0]['dato'], 7.236109)
-
-    def test_banxico_api_helper_many_data(self):
-        data = get_banxico_data(start_date='2022-3-1', end_date='2022-3-20')
-
-        self.assertEqual(len(data), 20)
 
     def test_get_udis(self):
         client = Client()
