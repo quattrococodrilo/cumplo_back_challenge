@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from datetime import date
 
 
-class UdisForm(forms.Form):
+class DollarForm(forms.Form):
 
     start_date = forms.DateField(
         label='Fecha inicial',
@@ -46,6 +46,6 @@ class UdisForm(forms.Form):
             raise ValidationError(
                 'La fecha final no debe ser menor al mes de mayo de 1995')
 
-        if end_date and end_date > date.today():
+        if end_date > date.today():
             raise ValidationError(
                 'La fecha final no puede ser mayor a la fecha actual')

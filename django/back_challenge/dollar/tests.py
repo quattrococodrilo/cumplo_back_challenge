@@ -54,11 +54,9 @@ class UdisTest(TestCase):
 
         self.assertEqual(200, response.status_code)
 
-        dates = response.context.get('udis_dates')
-        values = response.context.get('udis_values')
+        data = response.context.get('udis')
 
-        self.assertEqual(len(dates), 20)
-        self.assertEqual(len(values), 20)
+        self.assertEqual(len(data), 20)
 
     def test_get_udis_wrong_data_range(self):
         client = Client()
