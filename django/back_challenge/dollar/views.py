@@ -16,12 +16,12 @@ class DollarIndexView(TemplateView):
 
         today = datetime.today().strftime('%Y-%m-%d')
 
-        udis_today = get_banxico_data(
+        dollar_today = get_banxico_data(
             serie=BANXICO_DOLLAR_SERIES,
             start_date=today
         )
 
-        context['dollar_today'] = udis_today[0]['dato']
+        context['dollar_today'] = dollar_today[0]['dato']
 
         params = self.request.GET.dict()
 
