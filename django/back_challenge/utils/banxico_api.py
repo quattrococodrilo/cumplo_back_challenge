@@ -5,7 +5,7 @@ import requests
 
 
 class BanxicoApi:
-    """ 
+    """
     Consulta la API de BANXICO.
 
     @method create: devuelve una instanta de BanxicoApi. Requiere
@@ -54,7 +54,6 @@ class BanxicoApi:
 
         Raises:
             Exception: Date format incorrect.
-            Exception: The year must be greater than or equal to 1995.
             Exception: The month must be between 1 an 12.
             Exception: The day must be in the range of days of the month.
 
@@ -66,9 +65,6 @@ class BanxicoApi:
             raise Exception('Date format incorrect, it must be YYYY-mm-dd.')
 
         [year, month, day] = [int(i) for i in date.split('-')]
-
-        if year < 1995:
-            raise Exception('The year must be greater than or equal to 1995.')
 
         if month > 13 or month < 1:
             raise Exception('The month must be between 1 an 12.')

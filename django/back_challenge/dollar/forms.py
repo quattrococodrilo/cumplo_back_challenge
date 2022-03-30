@@ -28,24 +28,16 @@ class DollarForm(forms.Form):
             raise ValidationError(
                 'La fecha inicial debe ser menor a la fecha final.')
 
-        if start_date.year < 1995:
+        if start_date.year < 1954:
             raise ValidationError(
-                'La fecha inicial no puede ser menor a 1995.'
+                'La fecha inicial no puede ser menor a 1954.'
             )
 
-        if end_date and end_date.year < 1995:
+        if end_date and end_date.year < 1954:
             raise ValidationError(
-                'La fecha final no puede ser menor a 1995.'
+                'La fecha final no puede ser menor a 1954.'
             )
 
-        if start_date.month < 5 and start_date.year <= 1995:
-            raise ValidationError(
-                'La fecha inicial no debe ser menor al mes de mayo de 1995')
-
-        if end_date and end_date.month < 5 and end_date.year <= 1995:
-            raise ValidationError(
-                'La fecha final no debe ser menor al mes de mayo de 1995')
-
-        if end_date > date.today():
+        if end_date and end_date > date.today():
             raise ValidationError(
                 'La fecha final no puede ser mayor a la fecha actual')

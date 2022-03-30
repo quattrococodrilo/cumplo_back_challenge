@@ -1,49 +1,54 @@
 from datetime import datetime
 
+from back_chanllenge.settings import BANXICO_DOLLAR_SERIES
 from django.views.generic import TemplateView
+from utils.helpers import get_banxico_data
 
-from .forms import UdisForm
-from .helpers import get_banxico_data
+from .forms import DollarForm
 
 
-class UdisIndexView(TemplateView):
+class DollarIndexView(TemplateView):
 
-    template_name = 'udis/index.html'
+    template_name = 'dollar/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         today = datetime.today().strftime('%Y-%m-%d')
 
-        udis_today = get_banxico_data(today)
+        udis_today = get_banxico_data(
+            serie=BANXICO_DOLLAR_SERIES,
+            start_date=today
+        )
 
-        context['udis_today'] = udis_today[0]['dato']
+        context['dollar_today'] = udis_today[0]['dato']
 
         params = self.request.GET.dict()
 
         if 'start_date' in params or 'end_date' in params:
-            form = UdisForm(params)
+            form = DollarForm(params)
 
             context['form'] = form
 
             if form.is_valid():
                 dataCleaned = list(form.cleaned_data.values())
 
-                udis = get_banxico_data(
+                dollar = get_banxico_data(
+                    serie=BANXICO_DOLLAR_SERIES,
                     start_date=dataCleaned[0].strftime('%Y-%m-%d'),
                     end_date=(dataCleaned[1].strftime('%Y-%m-%d')
                               if dataCleaned[1] else ''),
                 )
 
-                context['udis_dates'] = [i['fecha'] for i in udis]
-                context['udis_values'] = [i['dato'] for i in udis]
+                context['dollar_dates'] = [i['fecha'] for i in dollar]
+                context['dollar_values'] = [i['dato'] for i in dollar]
 
-                context['average'] = sum([i['dato'] for i in udis]) / len(udis)
+                context['average'] = sum([i['dato'] for i in dollar]) / len(dollar)
 
-                context['max'] = max(udis, key=lambda i: i['dato'])
+                context['max'] = max(dollar, key=lambda i: i['dato'])
 
-                context['min'] = min(udis, key=lambda i: i['dato'])
+                context['min'] = min(dollar, key=lambda i: i['dato'])
 
         else:
-            context['form'] = UdisForm()
+            context['form'] = DollarForm()
         return context

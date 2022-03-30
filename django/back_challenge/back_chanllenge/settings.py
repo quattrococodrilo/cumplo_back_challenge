@@ -47,6 +47,7 @@ THIRDPARTY_APPS = []
 BACK_CHALLENGE_APPS = [
     'core.apps.CoreConfig',
     'udis.apps.UdisConfig',
+    'dollar.apps.DollarConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRDPARTY_APPS + BACK_CHALLENGE_APPS

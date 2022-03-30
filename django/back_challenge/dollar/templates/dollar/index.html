@@ -1,21 +1,23 @@
 {% extends 'layouts/base.html' %} 
 
-{% block title %} UDIS | {% endblock title %}
+{% load dollar_tags%}
+
+{% block title %} Dollar | {% endblock title %}
 
 {% block content %}
 <div class="flex flex-col justify-center items-center gap-3">
     <div class="w-full md:w-1/2">
         <div class="flex justify-end mb-6">
             <div class="text-center text-2xl text-indigo-800 border-2 border-indigo-800 bg-indigo-300 rounded-lg w-full md:w-1/2">
-                UDIS Hoy: <span class="font-bold">{{ udis_today }}</span>
+                Dollar Hoy: <span class="font-bold">{{ dollar_today|to_mxn }}</span>
             </div>
         </div>
         <div class="w-full border-2 border-slate-300 rounded-lg shadow-xl">
             <h1 class="text-center text-xl text-slate-900 rounded-t-lg bg-slate-300 -mt-1 p-2">
-                Consultar UDIS
+                Consultar Dollar
             </h1>
             <div class="p-3">
-            <form action="{% url 'udis:index' %}" method="GET">
+            <form action="{% url 'dollar:index' %}" method="GET">
                 <div class="flex flex-col gap-3">
                     {{ form }}
 
@@ -43,9 +45,9 @@
 
 {% block scripts %}
 
-{{ udis_dates|json_script:"udis_dates" }}
+{{ dollar_dates|json_script:"dollar_dates" }}
 
-{{ udis_values|json_script:"udis_values" }}
+{{ dollar_values|json_script:"dollar_values" }}
 
 <script
   src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"
@@ -54,9 +56,9 @@
 ></script>
 
 <script>
-const dates = JSON.parse(document.getElementById('udis_dates').textContent);
+const dates = JSON.parse(document.getElementById('dollar_dates').textContent);
 
-const values = JSON.parse(document.getElementById('udis_values').textContent);
+const values = JSON.parse(document.getElementById('dollar_values').textContent);
 
 const ctx = document.getElementById('chart').getContext('2d');
 
@@ -65,7 +67,7 @@ const myChart = new Chart(ctx, {
     data: {
         labels: dates,
         datasets: [{
-            label: '# UDIS',
+            label: '# Dollar',
             pointRadius: 0,
             data: values,
             backgroundColor: [
