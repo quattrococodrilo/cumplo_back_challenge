@@ -35,7 +35,8 @@ class UdisIndexView(TemplateView):
                               if dataCleaned[1] else ''),
                 )
 
-                context['udis'] = udis
+                context['udis_dates'] = [i['fecha'] for i in udis]
+                context['udis_values'] = [i['dato'] for i in udis]
 
                 context['average'] = sum([i['dato'] for i in udis]) / len(udis)
 

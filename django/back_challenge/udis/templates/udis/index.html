@@ -1,35 +1,100 @@
 {% extends 'layouts/base.html' %} 
 
-{% block title %} UDIS | {% endblock title %} 
+{% block title %} UDIS | {% endblock title %}
 
 {% block content %}
 <div class="flex flex-col justify-center items-center gap-3">
-    <div>
-
-        <div class="text-center">UDIS Hoy: {{ udis_today }}</div>
-        <div class="w-full">
+    <div class="w-full md:w-1/2">
+        <div class="flex justify-end mb-6">
+            <div class="text-center text-2xl text-indigo-800 border-2 border-indigo-800 bg-indigo-300 rounded-lg w-1/2">
+                UDIS Hoy: <span class="font-bold">{{ udis_today }}</span>
+            </div>
+        </div>
+        <div class="w-full border-2 border-slate-300 rounded-lg shadow-xl">
+            <h1 class="text-center text-xl text-slate-900 rounded-t-lg bg-slate-300 -mt-1 p-2">
+                Consultar UDIS
+            </h1>
+            <div class="p-3">
             <form action="{% url 'udis:index' %}" method="GET">
                 <div class="flex flex-col gap-3">
                     {{ form }}
 
-                    <button type="submit" class="bg-blue-500 border-2 border-blue-800 text-white uppercase p-2 rounded-lg font-bold">
-          Consultar
-        </button>
+                    <button type="submit"
+                        class="bg-blue-500 border-2 border-blue-800 text-white uppercase p-2 rounded-lg font-bold mt-4">
+                        Consultar
+                    </button>
                 </div>
             </form>
+            </div>
         </div>
-
     </div>
-    <div>
-        <p>Promedio: {{ average }}</p>
-        <p>Máximo: {{ max.fecha }} {{ max.dato }}</p>
-        <p>Mínimo: {{ min.fecha }} {{ min.dato }}</p>
+    <div class="flex md:flex-row flex-col md:justify-around justify-center w-full md:w-1/2">
+        {% include 'includes/data-mini-card.html' with title='Promedio' value=average %}
 
-        {% for item in udis %}
-        <p>{{ item.fecha }} - {{ item.dato }}</p>
-        {% empty %}
-        <p>no hay datos</p>
-        {% endfor %}
+        {% include 'includes/data-mini-card.html' with title='Máximo' value=max.dato date=max.fecha %}
+
+        {% include 'includes/data-mini-card.html' with title='Mínimo' value=min.dato date=min.fecha %}
     </div>
-</div>
+    <div class="w-full md:w-5/6">
+        <canvas id="chart" width="800" height="400"></canvas>
+    </div>
+    </div>
 {% endblock content %}
+
+{% block scripts %}
+
+{{ udis_dates|json_script:"udis_dates" }}
+
+{{ udis_values|json_script:"udis_values" }}
+
+<script
+  src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"
+  integrity="sha256-ErZ09KkZnzjpqcane4SCyyHsKAXMvID9/xwbl/Aq1pc="
+  crossorigin="anonymous"
+></script>
+
+<script>
+const dates = JSON.parse(document.getElementById('udis_dates').textContent);
+
+const values = JSON.parse(document.getElementById('udis_values').textContent);
+
+const ctx = document.getElementById('chart').getContext('2d');
+
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: dates,
+        datasets: [{
+            label: '# UDIS',
+            pointRadius: 0,
+            data: values,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+{% endblock scripts %}

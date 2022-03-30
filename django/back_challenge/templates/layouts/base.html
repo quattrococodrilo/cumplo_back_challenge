@@ -12,13 +12,21 @@
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
 
+    {% block heads %}{% endblock heads %}
+
     <title>{% block title %}{% endblock title %}Back Challenge</title>
 
     <style type="text/tailwindcss">
       @layer base {
         input {
-          @apply p-2 border-2 rounded-lg;
+          @apply p-2 border-2 rounded-lg border-slate-300 text-slate-600 font-semibold;
         }
+        label {
+          @apply font-bold text-slate-800;
+        }
+      }
+      @layer components {
+        
       }
     </style>
   </head>
@@ -35,6 +43,6 @@
 
     <footer>Footer</footer>
 
-    {% block script %}{% endblock script %}
+    {% block scripts %}{% endblock scripts %}
   </body>
 </html>
