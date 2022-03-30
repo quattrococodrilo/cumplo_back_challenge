@@ -1,0 +1,21 @@
+<div class="w-full border-2 border-slate-300 rounded-lg shadow-xl">
+  <h1
+    class="text-center text-xl text-slate-900 rounded-t-lg bg-slate-300 -mt-1 p-2"
+  >
+    {{ title }}
+  </h1>
+  <div class="p-3">
+    <form action="{% url route_name %}" method="GET">
+      <div class="flex flex-col gap-3">
+        {{ form }}
+
+        <button
+          type="submit"
+          class="bg-blue-500 border-2 border-blue-800 text-white uppercase p-2 rounded-lg font-bold mt-4"
+        >
+          Consultar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

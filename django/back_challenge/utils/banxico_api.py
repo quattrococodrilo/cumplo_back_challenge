@@ -2,6 +2,7 @@ import re
 from calendar import monthrange
 
 import requests
+from django.core.exceptions import ValidationError
 
 
 class BanxicoApi:
@@ -134,10 +135,13 @@ class BanxicoApi:
 
         data = respose.json()
 
-        if 'bmx' in data:
-            return [
-                {'fecha': i['fecha'], 'dato':float(i['dato'])}
-                for i in data['bmx']['series'][0]['datos']
-            ]
+        try:
+            if 'bmx' in data:
+                return [
+                    {'fecha': i['fecha'], 'dato':float(i['dato'])}
+                    for i in data['bmx']['series'][0]['datos']
+                ]
+        except:
+            return []
 
         return []
