@@ -1,0 +1,14 @@
+<div class="flex justify-end mb-6">
+  <div
+    class="text-center text-2xl text-indigo-800 border-2 border-indigo-800 bg-indigo-300 rounded-lg w-full md:w-1/2"
+  >
+    {{ title }}: 
+    <span class="font-bold">
+      {% if value == 'Por determinar' %}
+        {{ value }}
+      {% else %}
+        {{ value|floatformat:2 }}
+      {% endif %}
+    </span>
+  </div>
+</div>

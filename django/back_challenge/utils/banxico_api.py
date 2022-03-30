@@ -2,6 +2,7 @@ import re
 from calendar import monthrange
 
 import requests
+from django.core.exceptions import ValidationError
 
 
 class BanxicoApi:
