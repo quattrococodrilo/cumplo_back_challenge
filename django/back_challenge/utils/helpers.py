@@ -3,7 +3,7 @@ from back_chanllenge.settings import BANXICO_API, BANXICO_TOKEN
 
 
 def get_banxico_data(serie: str, start_date: str, end_date: str = ''):
-    """Obtiene los datos de Banxico según la serie de UDIS.
+    """Obtiene los datos de Banxico según la serie de que se indique.
 
     Args:
         start_date (str): Fecha de inicio
